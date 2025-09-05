@@ -1,6 +1,7 @@
 import sys
 import os
 import xml.etree.ElementTree as ET
+from PIL import Image, ImageDraw, ImageFont
 
 
 def get_leaves(node, leaves):
@@ -25,13 +26,37 @@ def main():
     for i in range(len(all_files)):
         all_files[i] = all_files[i][:-4]
     file_names = list(set(all_files))
+    name = file_names.pop()
+    tree = ET.parse(os.path.join(directory, name + ".xml"))
+    root = tree.getroot()
+    leaves = []
+    get_leaves(root, leaves)
+    print(leaves[0].attrib)
     
-    for name in file_names:
-        tree = ET.parse(os.path.join(directory, name + ".xml"))
-        root = tree.getroot()
-        leaves = []
-        get_leaves(root, leaves)
-        print(leaves)
+    with Image.open(os.path.join(directory, name + ".png")).convert("RGBA") as base:
+        d = ImageDraw.Draw(base)
+        
+        for leaf in leaves:
+            bounds = leaf.attrib["bounds"]
+            bounds = bounds.replace("][", ",")
+            bounds = bounds.replace("]", "")
+            bounds = bounds.replace("[", "")
+            bounds = bounds.split(",")
+            for i in range(len(bounds)):
+                bounds[i] = int(bounds[i])
+            
+            d.rectangle(bounds, outline = (255, 255, 40), width = 4)
+
+        base.show()
+    # for name in file_names:
+    #     tree = ET.parse(os.path.join(directory, name + ".xml"))
+    #     root = tree.getroot()
+    #     leaves = []
+    #     get_leaves(root, leaves)
+    #     print(leaves[0].attrib)
+        
+    #     with Image.open(os.path.join(directory, name + ".png")).convert("RGBA") as base:
+    #         base.show()
 
 if __name__ == "__main__":
     main()
