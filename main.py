@@ -2,6 +2,15 @@ import sys
 import os
 import xml.etree.ElementTree as ET
 
+
+def get_leaves(node, leaves):
+    if len(node) == 0:
+        leaves.append(node)
+        return
+    for child in node:
+        get_leaves(child, leaves)
+    
+
 def main():
     directory = ""
     file_names = []
@@ -19,7 +28,10 @@ def main():
     
     for name in file_names:
         tree = ET.parse(os.path.join(directory, name + ".xml"))
-        print(tree.getroot())
+        root = tree.getroot()
+        leaves = []
+        get_leaves(root, leaves)
+        print(leaves)
 
 if __name__ == "__main__":
     main()
