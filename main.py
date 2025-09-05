@@ -1,17 +1,23 @@
 import sys
 import os
-import node
+import Node as XMLTree
 
 
 
 
+class Node:
 
+    def __init__(self):
+        self.children = []
+
+    def read_metadata(self, data):
+        print(data)
 
 
 def main():
     directory = ""
     file_names = []
-    node = node.new()
+    node = XMLTree
 
     if len(sys.argv) == 2 and os.path.isdir(sys.argv[1]):
         directory = sys.argv[1]
@@ -27,6 +33,7 @@ def main():
     for name in file_names:
         with open(os.path.join(directory, name + ".xml")) as file:
             xml_file = file.read()
+            node.read_metadata(xml_file)
             
 
 
