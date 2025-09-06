@@ -32,7 +32,6 @@ def draw_highlights(directory, file_name, save_directory = ""):
         
         for leaf in leaves:
             bounds = leaf.attrib["bounds"]
-            print(leaf.attrib["class"])
             bounds = bounds.replace("][", ",")[1:-1].split(",")
             bounds = [int(x) for x in bounds]
             draw_dashed_rectangle(d, bounds)
